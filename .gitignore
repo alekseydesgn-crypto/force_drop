@@ -1,0 +1,21 @@
+# macOS
+.DS_Store
+._*
+
+# editors
+.vscode/
+.idea/
+*.swp
+
+# Claude Code local settings
+.claude/
+
+# Python (только если кто-то будет запускать scripts/*.py)
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# logs / temp
+*.log
+.tmp/
