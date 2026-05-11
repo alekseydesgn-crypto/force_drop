@@ -255,26 +255,32 @@ button { font: inherit; color: inherit; }
   font-weight: 700;
   margin: 0;
   display: flex; flex-direction: column; align-items: center;
-  line-height: .94;
+  line-height: 1;
   letter-spacing: 0;
   text-transform: uppercase;
 }
 .hero__title-row {
   display: block;
-  padding-inline: 0.18em;
   overflow: visible;
   max-width: 100%;
 }
 .hero__title-row--main {
   font-size: clamp(56px, 9.5vw, 130px);
   background: var(--grad-warm);
-  -webkit-background-clip: text; background-clip: text; color: transparent;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  /* расширяем paint-бокс, чтобы ascender глифов не оказывался за пределами
+     закрашиваемой области (иначе верх букв остаётся прозрачным) */
+  padding: 0.18em 0.18em;
+  margin: -0.18em -0.18em;
 }
 .hero__title-row--sub {
   font-size: clamp(28px, 4.8vw, 64px);
   color: var(--text);
   letter-spacing: -.01em;
   margin-top: -.04em;
+  padding-inline: 0.08em;
 }
 
 .hero__lead {
