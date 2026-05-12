@@ -589,6 +589,16 @@ button { font: inherit; color: inherit; }
   color: var(--accent-2);
 }
 .drop__icon svg { width: 22px; height: 22px; }
+.drop__amount {
+  display: inline-flex; align-items: baseline; gap: 6px;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 18px;
+  letter-spacing: -.01em;
+  background: var(--grad-warm);
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+  margin-top: -4px;
+}
 .drop h4 {
   margin: 0;
   font-family: var(--font-display);
