@@ -197,7 +197,7 @@ button { font: inherit; color: inherit; }
 .hero {
   position: relative;
   min-height: 100vh;
-  padding: 140px 0 100px;
+  padding: 140px 0 140px;
   display: flex;
   align-items: center;
   isolation: isolate;
@@ -348,7 +348,7 @@ button { font: inherit; color: inherit; }
 
 .hero__scroll {
   position: absolute;
-  left: 50%; bottom: 28px;
+  left: 50%; bottom: 40px;
   transform: translateX(-50%);
   width: 26px; height: 42px;
   border: 1.5px solid var(--line-2);
@@ -556,9 +556,10 @@ button { font: inherit; color: inherit; }
 .price__rows li b {
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: 17px;
+  font-size: 22px;
   color: var(--text);
   white-space: nowrap;
+  letter-spacing: -.01em;
 }
 .price__row--accent { background: rgba(255,122,26,.08); padding: 8px 12px; margin: 0 -12px; border-radius: 10px; }
 .price__row--accent span { color: var(--accent-2) !important; font-weight: 600; }
@@ -1392,6 +1393,24 @@ body.lb-open { overflow: hidden; }
   display: flex; align-items: center; justify-content: space-between; gap: 24px; flex-wrap: wrap;
 }
 .footer__brand img { height: 36px; width: auto; }
+.footer__address {
+  display: flex; flex-direction: column; gap: 2px;
+  font-size: 13px;
+  line-height: 1.4;
+}
+.footer__city {
+  color: var(--muted);
+  font-size: 11px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+.footer__address a {
+  color: var(--text);
+  font-weight: 500;
+  transition: color .2s ease;
+}
+.footer__address a:hover { color: var(--accent-2); }
 .footer__copy { margin: 0; color: var(--muted); font-size: 13px; }
 .footer__links { display: flex; gap: 18px; }
 .footer__links a { color: var(--muted); font-size: 13px; font-weight: 500; transition: color .2s ease; }
@@ -1408,6 +1427,23 @@ body.lb-open { overflow: hidden; }
   .skin--weekly { grid-column: span 2; }
   .skin--monthly { grid-column: span 2; }
   .reviews__grid { grid-template-columns: repeat(2, 1fr); }
+
+  /* На узких — drop с иконкой и заголовком в одной строке, цена и описание ниже */
+  .drop {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    grid-template-areas:
+      "icon title"
+      "amount amount"
+      "desc desc";
+    column-gap: 16px;
+    row-gap: 14px;
+    align-items: center;
+  }
+  .drop__icon { grid-area: icon; margin: 0; }
+  .drop h4 { grid-area: title; margin: 0; }
+  .drop__amount { grid-area: amount; margin: 0; }
+  .drop p { grid-area: desc; margin: 0; }
 }
 @media (max-width: 1100px) {
   .features { grid-template-columns: repeat(3, 1fr); }
@@ -1459,7 +1495,17 @@ body.lb-open { overflow: hidden; }
   .reviews__head { flex-direction: column; align-items: flex-start; }
 
   .form { padding: 22px; }
-  .field-row { grid-template-columns: 1fr 1fr; gap: 10px; }
+  /* дата + время в одной строке c гарантированным gap 16px,
+     разной ширины (дата шире, время уже) */
+  .field-row {
+    display: flex;
+    flex-direction: row;
+    gap: 16px;
+    align-items: stretch;
+  }
+  .field-row > .field { min-width: 0; }
+  .field-row > .field:first-child { flex: 1.6; }
+  .field-row > .field:last-child  { flex: 1; }
   .field input, .field select {
     padding: 13px 12px;
     font-size: 14px;
@@ -1471,7 +1517,7 @@ body.lb-open { overflow: hidden; }
   .field input[type="time"] {
     text-align: center;
     font-size: 14px;
-    padding: 13px 6px;
+    padding: 13px 4px;
     font-variant-numeric: tabular-nums;
   }
   .field input[type="date"]::-webkit-date-and-time-value,
