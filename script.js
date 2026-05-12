@@ -65,6 +65,38 @@
     phone.addEventListener('blur', () => { if (phone.value === '+7' || phone.value === '+7 ') phone.value = ''; });
   }
 
+  // lazy-load Яндекс.Карты — iframe вставляется только когда пользователь
+  // приближается к блоку (или сразу, если IO нет в браузере)
+  const mapEl = $('#info-map');
+  if (mapEl) {
+    const loadMap = () => {
+      if (mapEl.classList.contains('is-loaded')) return;
+      const src = mapEl.dataset.src;
+      if (!src) return;
+      const iframe = document.createElement('iframe');
+      iframe.src = src;
+      iframe.loading = 'lazy';
+      iframe.referrerPolicy = 'no-referrer-when-downgrade';
+      iframe.allowFullscreen = true;
+      iframe.title = 'ФОРС Дроп Зона на карте';
+      mapEl.appendChild(iframe);
+      mapEl.classList.add('is-loaded');
+    };
+    if ('IntersectionObserver' in window) {
+      const mapIO = new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+          if (e.isIntersecting) {
+            loadMap();
+            mapIO.disconnect();
+          }
+        });
+      }, { rootMargin: '400px 0px' });
+      mapIO.observe(mapEl);
+    } else {
+      loadMap();
+    }
+  }
+
   // min date = today
   const dateInput = $('#f-date');
   if (dateInput) {

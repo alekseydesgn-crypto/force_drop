@@ -1290,8 +1290,34 @@ body.lb-open { overflow: hidden; }
   position: absolute; inset: 0;
   width: 100%; height: 100%;
   border: 0;
-  filter: invert(0.92) hue-rotate(180deg) saturate(.85) brightness(.95) contrast(.95);
+  filter: invert(.92) hue-rotate(180deg);
 }
+.info__map-placeholder {
+  position: absolute; inset: 0;
+  display: grid; place-items: center; gap: 14px;
+  background:
+    radial-gradient(60% 60% at 50% 45%, rgba(255,122,26,.18), transparent 70%),
+    repeating-linear-gradient(0deg, rgba(255,255,255,.025) 0, rgba(255,255,255,.025) 1px, transparent 1px, transparent 40px),
+    repeating-linear-gradient(90deg, rgba(255,255,255,.025) 0, rgba(255,255,255,.025) 1px, transparent 1px, transparent 40px),
+    var(--bg-elev);
+  color: var(--muted);
+  font-size: 13px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+.info__map-placeholder::before {
+  content: '';
+  width: 32px; height: 32px;
+  border-radius: 999px;
+  background: var(--grad-warm);
+  box-shadow: 0 0 0 6px rgba(255,122,26,.18), 0 0 20px rgba(255,122,26,.5);
+  animation: pinPulse 1.6s ease-in-out infinite;
+}
+@keyframes pinPulse {
+  0%, 100% { transform: scale(1); box-shadow: 0 0 0 6px rgba(255,122,26,.18), 0 0 20px rgba(255,122,26,.5); }
+  50%      { transform: scale(1.1); box-shadow: 0 0 0 10px rgba(255,122,26,.06), 0 0 28px rgba(255,122,26,.6); }
+}
+.info__map.is-loaded .info__map-placeholder { display: none; }
 .info__map::after {
   content: '';
   position: absolute; inset: 0;
@@ -1434,12 +1460,20 @@ body.lb-open { overflow: hidden; }
   .field-row { grid-template-columns: 1fr; }
   .footer__inner { flex-direction: column; text-align: center; }
   .skins { padding: 24px 18px; }
-  .skins__grid { grid-template-columns: 1fr; }
-  .skin--weekly { grid-column: span 1; }
-  .skin--monthly { grid-column: span 1; }
+  .skins__grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .skin--weekly { grid-column: span 2; }
+  .skin--monthly { grid-column: span 2; }
   .skin--monthly h4 { font-size: 20px; }
   .skin--monthly .skin__price { font-size: 22px; }
-  .skin h4 { min-height: auto; }
+  .skin h4 { min-height: auto; font-size: 13.5px; line-height: 1.25; }
+  .skin > h4 { margin-top: 10px; }
+  .skin > .skin__cond { margin-top: 6px; font-size: 11px; }
+  .skin > .skin__price { font-size: 16px; padding-bottom: 14px; }
+  .skin > :not(.skin__media) { padding-left: 12px; padding-right: 12px; }
+  .skin > .skin__top { padding-top: 12px; font-size: 9px; }
+  .skin__st { right: 10px; bottom: 12px; font-size: 9px; padding: 3px 6px; }
+  .skin--weekly h4 { font-size: 18px; }
+  .skin--weekly .skin__price { font-size: 20px; }
   .promo { padding: 30px 24px; min-height: auto; gap: 18px; }
   .promo__icon { width: 64px; height: 64px; }
   .promo__icon svg { width: 30px; height: 30px; }
