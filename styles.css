@@ -664,15 +664,22 @@ button { font: inherit; color: inherit; }
   overflow: hidden;
 }
 .skin > :not(.skin__media) { padding-left: 18px; padding-right: 18px; }
-.skin > .skin__top { padding-top: 16px; margin-top: 0; }
-.skin > .skin__price { padding-bottom: 18px; }
-.skin > h4 { margin-top: 14px; }
-.skin > .skin__cond { margin-top: 10px; padding-bottom: 6px; }
+.skin > .skin__top { padding-top: 18px; margin-top: 0; }
+.skin > .skin__price { padding-bottom: 18px; margin-top: 18px; }
+.skin > h4 { margin-top: 18px; }
+.skin > .skin__cond { margin-top: 18px; }
+
+.skin__cond {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  font-size: 12px;
+  color: var(--muted);
+  letter-spacing: .02em;
+}
 
 .skin__st {
-  position: absolute;
-  bottom: 16px;
-  right: 16px;
   font-size: 10px;
   font-weight: 700;
   letter-spacing: .14em;
@@ -682,8 +689,9 @@ button { font: inherit; color: inherit; }
   padding: 4px 8px;
   border-radius: 4px;
   border: 1px solid rgba(255,182,39,.35);
-  z-index: 2;
   line-height: 1;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 .skin__media {
   position: relative;
@@ -754,14 +762,8 @@ button { font: inherit; color: inherit; }
   line-height: 1.2;
   min-height: 2.4em;
 }
-.skin__cond {
-  font-size: 12px;
-  color: var(--muted);
-  letter-spacing: .02em;
-}
 .skin__price {
-  margin-top: auto;
-  padding-top: 12px;
+  padding-top: 14px;
   border-top: 1px solid var(--line);
   font-family: var(--font-display);
   font-weight: 700;
@@ -1457,7 +1459,19 @@ body.lb-open { overflow: hidden; }
   .reviews__head { flex-direction: column; align-items: flex-start; }
 
   .form { padding: 22px; }
-  .field-row { grid-template-columns: 1fr; }
+  .field-row { grid-template-columns: 1fr 1fr; gap: 10px; }
+  .field input, .field select {
+    padding: 14px 14px;
+    font-size: 15px;
+    min-width: 0;
+    max-width: 100%;
+  }
+  .field input[type="date"],
+  .field input[type="time"] {
+    padding-right: 8px;
+    font-size: 14px;
+  }
+  .field select { padding-right: 36px; background-position: right 12px center; }
   .footer__inner { flex-direction: column; text-align: center; }
   .skins { padding: 24px 18px; }
   .skins__grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
@@ -1466,12 +1480,23 @@ body.lb-open { overflow: hidden; }
   .skin--monthly h4 { font-size: 20px; }
   .skin--monthly .skin__price { font-size: 22px; }
   .skin h4 { min-height: auto; font-size: 13.5px; line-height: 1.25; }
-  .skin > h4 { margin-top: 10px; }
-  .skin > .skin__cond { margin-top: 6px; font-size: 11px; }
-  .skin > .skin__price { font-size: 16px; padding-bottom: 14px; }
+  .skin > h4 { margin-top: 12px; }
+  .skin > .skin__cond { margin-top: 12px; font-size: 11px; }
+  .skin > .skin__price { margin-top: 12px; padding-bottom: 14px; font-size: 16px; }
   .skin > :not(.skin__media) { padding-left: 12px; padding-right: 12px; }
   .skin > .skin__top { padding-top: 12px; font-size: 9px; }
-  .skin__st { right: 10px; bottom: 12px; font-size: 9px; padding: 3px 6px; }
+  /* на мобиле StatTrak уходит в правый верхний угол поверх фото скина */
+  .skin .skin__st {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    z-index: 3;
+    font-size: 9px;
+    padding: 3px 6px;
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    background: rgba(255,182,39,.2);
+  }
   .skin--weekly h4 { font-size: 18px; }
   .skin--weekly .skin__price { font-size: 20px; }
   .promo { padding: 30px 24px; min-height: auto; gap: 18px; }
