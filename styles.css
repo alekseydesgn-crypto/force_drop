@@ -731,6 +731,55 @@ button { font: inherit; color: inherit; }
   font-size: 24px;
 }
 
+/* топ-приз: ежемесячный дроп ножа */
+.skin--monthly {
+  position: relative;
+  background:
+    radial-gradient(60% 90% at 0% 0%, rgba(255,182,39,.28) 0%, transparent 60%),
+    linear-gradient(180deg, rgba(255,122,26,.16) 0%, var(--surface) 80%);
+  border-color: rgba(255,182,39,.55);
+  grid-column: span 2;
+  box-shadow: 0 24px 60px rgba(255,122,26,.16);
+}
+.skin--monthly::before {
+  background: linear-gradient(90deg, #FFB627, #FF7A1A, #FF3D00);
+  opacity: 1;
+  height: 4px;
+}
+.skin--monthly .skin__badge {
+  position: absolute;
+  top: 16px; right: 16px;
+  width: 44px; height: 44px;
+  display: grid; place-items: center;
+  background: linear-gradient(135deg, rgba(255,182,39,.3), rgba(255,61,0,.2));
+  border: 1px solid rgba(255,182,39,.6);
+  border-radius: 999px;
+  color: #FFE08A;
+  animation: monthlyGlow 2.6s ease-in-out infinite;
+}
+.skin--monthly .skin__badge svg { width: 22px; height: 18px; }
+@keyframes monthlyGlow {
+  0%, 100% { filter: drop-shadow(0 0 0 rgba(255,224,138,0)); }
+  50%      { filter: drop-shadow(0 0 14px rgba(255,224,138,.7)); }
+}
+.skin--monthly .skin__period { font-size: 12px; }
+.skin--monthly .skin__period--top {
+  color: #FFE08A;
+  background: rgba(255,182,39,.18);
+  padding: 3px 8px;
+  border-radius: 4px;
+  border: 1px solid rgba(255,182,39,.4);
+}
+.skin--monthly .skin__date { color: #FFD065; font-size: 12px; }
+.skin--monthly h4 {
+  font-size: 24px;
+  min-height: auto;
+  background: var(--grad-warm);
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+.skin--monthly .skin__cond { font-size: 13px; }
+.skin--monthly .skin__price { font-size: 26px; }
+
 .skins__footnote {
   margin: 24px 0 0;
   text-align: center;
@@ -1271,6 +1320,7 @@ body.lb-open { overflow: hidden; }
   .promos { grid-template-columns: 1fr; }
   .skins__grid { grid-template-columns: repeat(2, 1fr); }
   .skin--weekly { grid-column: span 2; }
+  .skin--monthly { grid-column: span 2; }
   .reviews__grid { grid-template-columns: repeat(2, 1fr); }
 }
 @media (max-width: 1100px) {
@@ -1328,6 +1378,9 @@ body.lb-open { overflow: hidden; }
   .skins { padding: 24px 18px; }
   .skins__grid { grid-template-columns: 1fr; }
   .skin--weekly { grid-column: span 1; }
+  .skin--monthly { grid-column: span 1; }
+  .skin--monthly h4 { font-size: 20px; }
+  .skin--monthly .skin__price { font-size: 22px; }
   .skin h4 { min-height: auto; }
   .promo { padding: 30px 24px; min-height: auto; gap: 18px; }
   .promo__icon { width: 64px; height: 64px; }
