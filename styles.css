@@ -563,20 +563,26 @@ button { font: inherit; color: inherit; }
 }
 .price__row--accent {
   background: rgba(255,122,26,.1);
-  padding: 12px 14px;
+  padding: 9px 12px;
   margin: 0 -12px;
   border-radius: 10px;
   border: 1px solid rgba(255,122,26,.25);
+  flex-wrap: nowrap;
 }
 .price__row--accent span {
   color: var(--accent-2) !important;
   font-weight: 800;
   font-family: var(--font-display);
-  font-size: 17px;
-  letter-spacing: .01em;
+  font-size: 11px;
+  letter-spacing: .04em;
   text-transform: uppercase;
+  white-space: nowrap;
 }
-.price__row--accent b { color: var(--accent-2) !important; font-size: 24px; }
+.price__row--accent b {
+  color: var(--accent-2) !important;
+  font-size: 16px;
+  white-space: nowrap;
+}
 
 .drops {
   display: grid;
