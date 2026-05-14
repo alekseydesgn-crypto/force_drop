@@ -580,7 +580,7 @@ button { font: inherit; color: inherit; }
 }
 .price__row--accent b {
   color: var(--accent-2) !important;
-  font-size: 16px;
+  font-size: 24px;
   white-space: nowrap;
 }
 
