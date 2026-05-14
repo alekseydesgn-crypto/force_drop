@@ -561,9 +561,22 @@ button { font: inherit; color: inherit; }
   white-space: nowrap;
   letter-spacing: -.01em;
 }
-.price__row--accent { background: rgba(255,122,26,.08); padding: 8px 12px; margin: 0 -12px; border-radius: 10px; }
-.price__row--accent span { color: var(--accent-2) !important; font-weight: 600; }
-.price__row--accent b { color: var(--accent-2) !important; }
+.price__row--accent {
+  background: rgba(255,122,26,.1);
+  padding: 12px 14px;
+  margin: 0 -12px;
+  border-radius: 10px;
+  border: 1px solid rgba(255,122,26,.25);
+}
+.price__row--accent span {
+  color: var(--accent-2) !important;
+  font-weight: 800;
+  font-family: var(--font-display);
+  font-size: 17px;
+  letter-spacing: .01em;
+  text-transform: uppercase;
+}
+.price__row--accent b { color: var(--accent-2) !important; font-size: 24px; }
 
 .drops {
   display: grid;
@@ -572,13 +585,25 @@ button { font: inherit; color: inherit; }
   margin-top: 32px;
 }
 .drop {
-  display: flex; flex-direction: column; gap: 14px;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-areas:
+    "icon title"
+    "amount amount"
+    "desc desc";
+  column-gap: 16px;
+  row-gap: 14px;
+  align-items: center;
   padding: 24px 26px;
   background: linear-gradient(135deg, rgba(255,122,26,.08), rgba(167,139,250,.06));
   border: 1px solid rgba(255,122,26,.25);
   border-radius: var(--r-lg);
   transition: border-color .25s ease, transform .25s ease;
 }
+.drop__icon  { grid-area: icon;   margin: 0; }
+.drop h4     { grid-area: title;  margin: 0; }
+.drop__amount{ grid-area: amount; margin: 0; }
+.drop p      { grid-area: desc;   margin: 0; }
 .drop:hover { border-color: rgba(255,122,26,.45); transform: translateY(-3px); }
 .drop__icon {
   flex-shrink: 0;
@@ -665,10 +690,10 @@ button { font: inherit; color: inherit; }
   overflow: hidden;
 }
 .skin > :not(.skin__media) { padding-left: 18px; padding-right: 18px; }
-.skin > .skin__top { padding-top: 18px; margin-top: 0; }
-.skin > .skin__price { padding-bottom: 18px; margin-top: 18px; }
-.skin > h4 { margin-top: 18px; }
-.skin > .skin__cond { margin-top: 18px; }
+.skin > .skin__top { padding-top: 22px; margin-top: 0; }
+.skin > .skin__price { padding-bottom: 22px; margin-top: 22px; }
+.skin > h4 { margin-top: 22px; }
+.skin > .skin__cond { margin-top: 22px; }
 
 .skin__cond {
   display: flex;
@@ -1428,22 +1453,6 @@ body.lb-open { overflow: hidden; }
   .skin--monthly { grid-column: span 2; }
   .reviews__grid { grid-template-columns: repeat(2, 1fr); }
 
-  /* На узких — drop с иконкой и заголовком в одной строке, цена и описание ниже */
-  .drop {
-    display: grid;
-    grid-template-columns: auto 1fr;
-    grid-template-areas:
-      "icon title"
-      "amount amount"
-      "desc desc";
-    column-gap: 16px;
-    row-gap: 14px;
-    align-items: center;
-  }
-  .drop__icon { grid-area: icon; margin: 0; }
-  .drop h4 { grid-area: title; margin: 0; }
-  .drop__amount { grid-area: amount; margin: 0; }
-  .drop p { grid-area: desc; margin: 0; }
 }
 @media (max-width: 1100px) {
   .features { grid-template-columns: repeat(3, 1fr); }
@@ -1608,6 +1617,9 @@ body.lb-open { overflow: hidden; }
 }
 .btn--primary.btn--lg { animation: ctaPulse 3.4s ease-in-out infinite; }
 .btn--primary.btn--lg:hover { animation: none; }
+/* Кнопка формы — без анимации и без glow обводки по углам */
+.form__submit,
+.form__submit:hover { animation: none; box-shadow: none; }
 
 /* zone / price hover lift + accent glow */
 .zone, .price, .bar__card, .feature, .review, .info__card, .drop {
