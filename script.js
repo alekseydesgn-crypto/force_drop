@@ -158,11 +158,12 @@
   /* ============== LIGHTBOX ============== */
   const photos = [
     { src: 'images/interior/ob.webp',       alt: 'Общий план зала ФОРС' },
+    { src: 'images/interior/vip_room.webp', alt: 'VIP-комната' },
     { src: 'images/interior/duo_comp.webp', alt: 'DUO — два игровых ПК' },
     { src: 'images/interior/admin.webp',    alt: 'Стойка администратора' },
     { src: 'images/interior/pc.webp',       alt: 'Игровой ПК с RTX' },
+    { src: 'images/interior/low.webp',      alt: 'Атмосфера игрового зала' },
     { src: 'images/interior/also.webp',     alt: 'Дроп на экране' },
-    { src: 'images/interior/low.webp',      alt: 'Игровое место' },
     { src: 'images/interior/drop.png',      alt: 'Экран программы дропов' }
   ];
 
