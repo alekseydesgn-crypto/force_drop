@@ -1471,6 +1471,34 @@ body.lb-open { overflow: hidden; }
   .nav__cta { display: none; }
 }
 
+/* ===== iPad / планшет: одна строка для скинов, скидок, бара ===== */
+@media (min-width: 721px) and (max-width: 1180px) {
+  /* Скины: ежедневные по 4 в ряд, weekly занимают span 2 → 2 в одну строку */
+  .skins__grid { grid-template-columns: repeat(4, 1fr); gap: 12px; }
+  .skin--weekly  { grid-column: span 2; }
+  .skin--monthly { grid-column: span 2; }
+  .skin h4 { font-size: 14px; min-height: 2.2em; }
+  .skin__price { font-size: 16px; }
+
+  /* Скидки 2 в строку */
+  .promos { grid-template-columns: 1fr 1fr; gap: 16px; }
+  .promo { padding: 28px 24px; min-height: 220px; }
+  .promo h4 { font-size: clamp(18px, 2vw, 24px); }
+
+  /* Бар в одну строку — 3 карточки */
+  .bar { grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  .bar__card { padding: 24px 20px; }
+
+  /* Форма брони: дата шире, время уже, гарантированный gap 18px */
+  .field-row {
+    display: flex;
+    gap: 18px;
+  }
+  .field-row > .field { min-width: 0; }
+  .field-row > .field:first-child { flex: 1.6; }
+  .field-row > .field:last-child  { flex: 1; }
+}
+
 @media (max-width: 720px) {
   .container { padding: 0 18px; }
   .section { padding: 80px 0; }

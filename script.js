@@ -158,7 +158,6 @@
   /* ============== LIGHTBOX ============== */
   const photos = [
     { src: 'images/interior/ob.webp',       alt: 'Общий план зала ФОРС' },
-    { src: 'images/interior/vip_room.webp', alt: 'VIP-комната' },
     { src: 'images/interior/duo_comp.webp', alt: 'DUO — два игровых ПК' },
     { src: 'images/interior/admin.webp',    alt: 'Стойка администратора' },
     { src: 'images/interior/pc.webp',       alt: 'Игровой ПК с RTX' },
