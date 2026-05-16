@@ -161,8 +161,8 @@
     { src: 'images/interior/duo_comp.webp', alt: 'DUO — два игровых ПК' },
     { src: 'images/interior/admin.webp',    alt: 'Стойка администратора' },
     { src: 'images/interior/pc.webp',       alt: 'Игровой ПК с RTX' },
+    { src: 'images/interior/also.webp',     alt: 'Экран дропа в зале' },
     { src: 'images/interior/low.webp',      alt: 'Атмосфера игрового зала' },
-    { src: 'images/interior/also.webp',     alt: 'Дроп на экране' },
     { src: 'images/interior/drop.png',      alt: 'Экран программы дропов' }
   ];
 
