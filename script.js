@@ -105,11 +105,17 @@
     dateInput.min = iso;
   }
 
-  // booking form -> open Telegram with prefilled message
+  // booking form -> отправка прямо в Telegram-бота заявок
+  const TG_BOT_TOKEN = '8640350068:AAE3e_tHfdyUfoznzupY4G7Qd6xtkOACzto';
+  const TG_CHAT_ID = '-5132056283';
+  const escapeHtml = (s) => String(s).replace(/[&<>"']/g, c => ({
+    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+  }[c]));
+
   const form = $('#bookingForm');
   const status = $('#formStatus');
   if (form) {
-    form.addEventListener('submit', (e) => {
+    form.addEventListener('submit', async (e) => {
       e.preventDefault();
       const nameVal = ($('#f-name')?.value || '').trim();
       const phoneVal = (phone?.value || '').trim();
@@ -136,22 +142,52 @@
         ? new Date(dateVal + 'T00:00').toLocaleDateString('ru-RU', { day: '2-digit', month: 'long', year: 'numeric' })
         : '—';
 
-      const lines = [
-        'Бронь · ФОРС Дроп Зона',
-        `Имя: ${nameVal}`,
-        `Телефон: ${phoneVal}`,
-        `Дата: ${dateHuman}`,
-        `Время: ${timeVal || '—'}`,
-        `Зона: ${zoneVal || '—'}`
-      ];
-      const tg = `https://t.me/forcedropzone?text=${encodeURIComponent(lines.join('\n'))}`;
+      const text = [
+        '📨 <b>Новая заявка — ФОРС Дроп Зона</b>',
+        '',
+        `<b>Имя:</b> ${escapeHtml(nameVal)}`,
+        `<b>Телефон:</b> ${escapeHtml(phoneVal)}`,
+        `<b>Дата:</b> ${escapeHtml(dateHuman)}`,
+        `<b>Время:</b> ${escapeHtml(timeVal || '—')}`,
+        `<b>Зона:</b> ${escapeHtml(zoneVal || '—')}`
+      ].join('\n');
 
+      const submitBtn = form.querySelector('.form__submit');
+      const originalText = submitBtn?.textContent || 'Отправить заявку';
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Отправляем…';
+      }
       status.hidden = false;
       status.classList.remove('is-error');
-      status.textContent = 'Открываем Telegram. Если не открылось — напиши в @forcedropzone';
+      status.textContent = 'Отправляем заявку…';
 
-      window.open(tg, '_blank', 'noopener');
-      form.reset();
+      try {
+        const res = await fetch(`https://api.telegram.org/bot${TG_BOT_TOKEN}/sendMessage`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            chat_id: TG_CHAT_ID,
+            text: text,
+            parse_mode: 'HTML',
+            disable_web_page_preview: true
+          })
+        });
+        const data = await res.json();
+        if (!data.ok) throw new Error(data.description || 'telegram api error');
+
+        status.textContent = '✅ Заявка отправлена! Администратор скоро перезвонит';
+        form.reset();
+      } catch (err) {
+        status.classList.add('is-error');
+        status.textContent = 'Не удалось отправить. Напиши в @forcedropzone — администратор ответит';
+        console.error('booking submit error:', err);
+      } finally {
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.textContent = originalText;
+        }
+      }
     });
   }
 
