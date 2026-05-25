@@ -61,6 +61,25 @@
       return out;
     };
     phone.addEventListener('focus', () => { if (!phone.value) phone.value = '+7 '; });
+    // если курсор стоит сразу после разделителя (скобки, пробел, дефис)
+    // и юзер жмёт Backspace — стираем разделитель + цифру перед ним
+    phone.addEventListener('keydown', (e) => {
+      if (e.key !== 'Backspace') return;
+      const val = phone.value;
+      const pos = phone.selectionStart;
+      if (pos !== phone.selectionEnd) return;
+      if (pos <= 0) return;
+      if (/\d/.test(val[pos - 1])) return;
+      e.preventDefault();
+      // ищем индекс цифры перед разделителями
+      let i = pos - 1;
+      while (i > 0 && !/\d/.test(val[i - 1])) i--;
+      if (i <= 0) return;
+      const newVal = val.slice(0, i - 1) + val.slice(pos);
+      phone.value = fmt(newVal);
+      const caret = phone.value.length;
+      phone.setSelectionRange(caret, caret);
+    });
     phone.addEventListener('input', () => { phone.value = fmt(phone.value); });
     phone.addEventListener('blur', () => { if (phone.value === '+7' || phone.value === '+7 ') phone.value = ''; });
   }
