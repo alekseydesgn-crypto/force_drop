@@ -126,7 +126,7 @@
 
   // booking form -> отправка прямо в Telegram-бота заявок
   const TG_BOT_TOKEN = '8640350068:AAE3e_tHfdyUfoznzupY4G7Qd6xtkOACzto';
-  const TG_CHAT_ID = '-5132056283';
+  const TG_CHAT_ID = '-1003914410606';
   const escapeHtml = (s) => String(s).replace(/[&<>"']/g, c => ({
     '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
   }[c]));
