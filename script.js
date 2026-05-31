@@ -146,11 +146,18 @@
         return;
       }
 
-      const text = [
+      const textHtml = [
         '📨 <b>Новая заявка — ФОРС Дроп Зона</b>',
         '',
         `<b>Имя:</b> ${escapeHtml(nameVal)}`,
         `<b>Телефон:</b> ${escapeHtml(phoneVal)}`
+      ].join('\n');
+
+      const textPlain = [
+        '📨 Новая заявка — ФОРС Дроп Зона',
+        '',
+        `Имя: ${nameVal}`,
+        `Телефон: ${phoneVal}`
       ].join('\n');
 
       const submitBtn = form.querySelector('.form__submit');
@@ -163,31 +170,87 @@
       status.classList.remove('is-error');
       status.textContent = 'Отправляем заявку…';
 
-      try {
-        const res = await fetch(`https://api.telegram.org/bot${TG_BOT_TOKEN}/sendMessage`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            chat_id: TG_CHAT_ID,
-            text: text,
-            parse_mode: 'HTML',
-            disable_web_page_preview: true
-          })
-        });
-        const data = await res.json();
-        if (!data.ok) throw new Error(data.description || 'telegram api error');
+      // helper — fetch с таймаутом, чтоб не висеть вечно если провайдер режет api.telegram.org
+      const fetchWithTimeout = (url, opts, ms = 8000) => {
+        const ctrl = new AbortController();
+        const t = setTimeout(() => ctrl.abort(), ms);
+        return fetch(url, { ...opts, signal: ctrl.signal })
+          .finally(() => clearTimeout(t));
+      };
 
+      // несколько попыток разными способами — у разных провайдеров режется по-разному
+      const trySend = async () => {
+        // 1) обычный POST с JSON
+        try {
+          const res = await fetchWithTimeout(
+            `https://api.telegram.org/bot${TG_BOT_TOKEN}/sendMessage`,
+            {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                chat_id: TG_CHAT_ID,
+                text: textHtml,
+                parse_mode: 'HTML',
+                disable_web_page_preview: true
+              })
+            }
+          );
+          const data = await res.json();
+          if (data.ok) return true;
+        } catch (e) { console.warn('attempt 1 failed:', e); }
+
+        // 2) GET с query string (часто проходит даже если POST режется DPI)
+        try {
+          const url = `https://api.telegram.org/bot${TG_BOT_TOKEN}/sendMessage`
+            + `?chat_id=${encodeURIComponent(TG_CHAT_ID)}`
+            + `&text=${encodeURIComponent(textHtml)}`
+            + `&parse_mode=HTML`
+            + `&disable_web_page_preview=true`;
+          const res = await fetchWithTimeout(url, { method: 'GET' });
+          const data = await res.json();
+          if (data.ok) return true;
+        } catch (e) { console.warn('attempt 2 failed:', e); }
+
+        // 3) POST form-urlencoded (некоторые DPI режут только JSON-payload)
+        try {
+          const body = new URLSearchParams({
+            chat_id: TG_CHAT_ID,
+            text: textHtml,
+            parse_mode: 'HTML',
+            disable_web_page_preview: 'true'
+          }).toString();
+          const res = await fetchWithTimeout(
+            `https://api.telegram.org/bot${TG_BOT_TOKEN}/sendMessage`,
+            {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+              body
+            }
+          );
+          const data = await res.json();
+          if (data.ok) return true;
+        } catch (e) { console.warn('attempt 3 failed:', e); }
+
+        return false;
+      };
+
+      const ok = await trySend();
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.textContent = originalText;
+      }
+
+      if (ok) {
         status.textContent = '✅ Заявка отправлена! Администратор скоро перезвонит';
         form.reset();
-      } catch (err) {
+      } else {
+        // финальный fallback — открыть Telegram-чат с предзаполненным сообщением,
+        // клиент сам жмёт send. Работает даже там где api.telegram.org заблокирован,
+        // потому что t.me доступен.
         status.classList.add('is-error');
-        status.textContent = 'Не удалось отправить. Напиши в @forcedropzone — администратор ответит';
-        console.error('booking submit error:', err);
-      } finally {
-        if (submitBtn) {
-          submitBtn.disabled = false;
-          submitBtn.textContent = originalText;
-        }
+        status.innerHTML = 'Не удалось отправить автоматически. Открываем Telegram — нажми «Отправить» в чате, или позвони +7&nbsp;915&nbsp;208-02-12';
+        const tgUrl = `https://t.me/forcedropzone?text=${encodeURIComponent(textPlain)}`;
+        setTimeout(() => window.open(tgUrl, '_blank', 'noopener'), 600);
       }
     });
   }
