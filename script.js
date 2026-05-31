@@ -116,14 +116,6 @@
     }
   }
 
-  // min date = today
-  const dateInput = $('#f-date');
-  if (dateInput) {
-    const t = new Date();
-    const iso = `${t.getFullYear()}-${String(t.getMonth()+1).padStart(2,'0')}-${String(t.getDate()).padStart(2,'0')}`;
-    dateInput.min = iso;
-  }
-
   // booking form -> отправка прямо в Telegram-бота заявок
   const TG_BOT_TOKEN = '8640350068:AAE3e_tHfdyUfoznzupY4G7Qd6xtkOACzto';
   const TG_CHAT_ID = '-1003914410606';
@@ -154,21 +146,11 @@
         return;
       }
 
-      const dateVal = ($('#f-date')?.value || '').trim();
-      const timeVal = ($('#f-time')?.value || '').trim();
-      const zoneVal = ($('#f-zone')?.value || '').trim();
-      const dateHuman = dateVal
-        ? new Date(dateVal + 'T00:00').toLocaleDateString('ru-RU', { day: '2-digit', month: 'long', year: 'numeric' })
-        : '—';
-
       const text = [
         '📨 <b>Новая заявка — ФОРС Дроп Зона</b>',
         '',
         `<b>Имя:</b> ${escapeHtml(nameVal)}`,
-        `<b>Телефон:</b> ${escapeHtml(phoneVal)}`,
-        `<b>Дата:</b> ${escapeHtml(dateHuman)}`,
-        `<b>Время:</b> ${escapeHtml(timeVal || '—')}`,
-        `<b>Зона:</b> ${escapeHtml(zoneVal || '—')}`
+        `<b>Телефон:</b> ${escapeHtml(phoneVal)}`
       ].join('\n');
 
       const submitBtn = form.querySelector('.form__submit');
