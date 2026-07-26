@@ -1874,7 +1874,7 @@ body.lb-open { overflow: hidden; }
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 16px;
+  gap: 26px;
 }
 
 @media (max-width: 720px) {
