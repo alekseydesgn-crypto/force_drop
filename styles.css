@@ -1770,3 +1770,113 @@ body.lb-open { overflow: hidden; }
   html { scroll-behavior: auto; }
   .hero__tag, .hero__title, .hero__lead, .hero__cta, .hero__stats { opacity: 1; animation: none; }
 }
+/* ========================================================================
+   ПРОМО: 3 часа бесплатно + Дроп (акция для новых игроков с рекламы)
+   Добавить в конец styles.css. Ничего из существующих правил не меняет.
+   ======================================================================== */
+
+/* --- вставка в hero --- */
+.hero__promo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+.hero__tag--promo {
+  color: #FFD065;
+  border-color: rgba(255,182,39,.45);
+  background: rgba(255,182,39,.08);
+}
+.hero__tag--promo .dot {
+  background: var(--accent-2);
+  box-shadow: 0 0 12px var(--accent-2);
+}
+.hero__promo-line {
+  max-width: 480px;
+  margin: 0;
+  font-size: clamp(14px, 1.2vw, 17px);
+  line-height: 1.5;
+  color: rgba(245,245,247,.78);
+  text-align: center;
+}
+
+/* --- новая секция: 3 часа + дроп --- */
+.promo-offer__steps {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+  margin-bottom: 44px;
+}
+.promo-offer__step {
+  position: relative;
+  padding: 28px 24px;
+  background: linear-gradient(180deg, rgba(255,255,255,.025), rgba(255,255,255,.01));
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  transition: transform .35s ease, border-color .25s ease, background .25s ease;
+}
+.promo-offer__step:hover { transform: translateY(-4px); border-color: rgba(255,122,26,.35); }
+
+.promo-offer__step--drop {
+  border-color: rgba(255,182,39,.35);
+  background: linear-gradient(180deg, rgba(255,182,39,.07), rgba(255,255,255,.01));
+}
+.promo-offer__step--drop:hover { border-color: rgba(255,182,39,.6); }
+
+.promo-offer__icon {
+  width: 52px; height: 52px;
+  display: grid; place-items: center;
+  background: rgba(255,122,26,.12);
+  border: 1px solid rgba(255,122,26,.3);
+  border-radius: 14px;
+  color: var(--accent-2);
+  margin-bottom: 18px;
+}
+.promo-offer__icon svg { width: 24px; height: 24px; }
+.promo-offer__step--drop .promo-offer__icon {
+  background: rgba(255,182,39,.16);
+  border-color: rgba(255,182,39,.4);
+  color: #FFD065;
+}
+
+.promo-offer__num {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 8px;
+}
+.promo-offer__num::before {
+  content: '';
+  width: 22px; height: 1px;
+  background: currentColor;
+}
+.promo-offer__step--drop .promo-offer__num { color: #FFD065; }
+
+.promo-offer__step h3 {
+  margin: 0 0 8px;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 22px;
+  text-transform: uppercase;
+  letter-spacing: .01em;
+}
+.promo-offer__step p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.promo-offer__cta {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+@media (max-width: 720px) {
+  .promo-offer__steps { grid-template-columns: 1fr; }
+}
