@@ -1900,7 +1900,10 @@ body.lb-open { overflow: hidden; }
 }
 #span1{
    font-size: 108px;
+   margin-top: 20px;
 }
 #action1{
-   font-size: 60px !important;
+   font-size: 48px !important;
+   margin-top: 30px;
+   margin-bottom: 40px;
 }
