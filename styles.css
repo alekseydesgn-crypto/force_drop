@@ -213,17 +213,9 @@ button { font: inherit; color: inherit; }
 .hero__bg-overlay {
   position: absolute; inset: 0;
   background:
-    radial-gradient(80% 80% at 50% 40%, rgba(7,7,10,.45), rgba(7,7,10,.85) 70%, var(--bg) 100%),
-    linear-gradient(180deg, rgba(7,7,10,.4) 0%, rgba(7,7,10,.85) 100%);
+    radial-gradient(80% 80% at 50% 40%, rgba(7,7,10,.20), rgba(7,7,10,.2) 70%, var(--bg) 100%),linear-gradient(180deg, rgba(7,7,10,.2) 0%, rgba(7,7,10,.25) 100%)
 }
-.hero__bg-grid {
-  position: absolute; inset: 0;
-  background-image:
-    linear-gradient(transparent 95%, rgba(255,255,255,.03) 95%),
-    linear-gradient(90deg, transparent 95%, rgba(255,255,255,.03) 95%);
-  background-size: 64px 64px;
-  mask-image: radial-gradient(ellipse at 50% 50%, black 30%, transparent 75%);
-}
+
 @keyframes heroZoom { from { transform: scale(1.12); } to { transform: scale(1.02); } }
 
 .hero__inner {
