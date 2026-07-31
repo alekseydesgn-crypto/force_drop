@@ -1880,3 +1880,29 @@ body.lb-open { overflow: hidden; }
 @media (max-width: 720px) {
   .promo-offer__steps { grid-template-columns: 1fr; }
 }
+.hero__promo-title{
+    font-family: var(--font-display);
+    font-weight:700;
+    font-size:clamp(90px,12vw,180px);
+    line-height:.9;
+    text-transform:uppercase;
+    letter-spacing:-.03em;
+    margin:0;
+    color:#fff;
+}
+
+.hero__promo-subtitle{
+    font-family:var(--font-display);
+    font-weight:700;
+    font-size:clamp(42px,5vw,72px);
+    line-height:.95;
+    text-transform:uppercase;
+    letter-spacing:-.02em;
+
+    background:var(--grad-warm);
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+
+    margin:16px 0 0;
+}
