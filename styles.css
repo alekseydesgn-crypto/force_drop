@@ -1504,7 +1504,7 @@ body.lb-open { overflow: hidden; }
   .nav { padding: 12px 18px; }
   .nav__logo img { height: 32px; }
 
-  .hero { padding: 110px 0 70px; min-height: auto; }
+  .hero { padding: 110px 0 70px; min-height: 100svh; }
   .hero__inner { padding: 0 18px; gap: 18px; }
   .hero__title-row--main { font-size: clamp(48px, 14vw, 90px); }
   .hero__title-row--sub { font-size: clamp(22px, 7vw, 42px); }
