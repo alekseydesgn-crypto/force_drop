@@ -19,6 +19,10 @@ venv/
 # logs / temp
 *.log
 .tmp/
+.env
+.env.*
+!.env.example
+node_modules/
 
 # brand assets that не нужны в репо
 *.pdf

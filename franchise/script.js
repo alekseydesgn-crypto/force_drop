@@ -71,7 +71,7 @@
     let utm = {};
     try { utm = JSON.parse(sessionStorage.getItem('force_franchise_utm') || '{}'); } catch {}
     try {
-      const response = await fetch('https://alexeydesign.ru/api/franchise', {
+      const response = await fetch('/api/franchise', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ ...payload, ...utm, source: sourceInput.value, page_url: location.href, referrer: document.referrer }),
