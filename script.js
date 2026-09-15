@@ -15,7 +15,7 @@
 
   // mobile menu
   const burger = $('#navBurger');
-  const links = $('#navLinks');
+  const links = $('#navSections');
   if (burger && links) {
     const close = () => { burger.setAttribute('aria-expanded', 'false'); links.classList.remove('is-open'); };
     burger.addEventListener('click', () => {

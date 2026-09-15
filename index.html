@@ -67,7 +67,12 @@ _tmr.push({id: "3784195", type: "pageView", start: (new Date()).getTime(), pid: 
 
   <a href="#contact" class="btn btn--primary btn--clean nav__cta">Забронировать</a>
 
-  <button class="nav__burger" id="navBurger" aria-label="Меню" aria-expanded="false">
+  <nav class="nav__sections" id="navSections" aria-label="Разделы сайта">
+    <a href="/" aria-current="page">Главная</a>
+    <a href="/franchise/">Франшиза</a>
+  </nav>
+
+  <button class="nav__burger" id="navBurger" aria-label="Открыть меню разделов" aria-expanded="false" aria-controls="navSections">
     <span></span><span></span><span></span>
   </button>
 </header>

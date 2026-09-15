@@ -192,6 +192,19 @@ button { font: inherit; color: inherit; }
 .nav__burger[aria-expanded="true"] span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
 .nav__burger[aria-expanded="true"] span:nth-child(2) { opacity: 0; }
 .nav__burger[aria-expanded="true"] span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+.nav__burger { display: flex; margin-left: 0; flex-shrink: 0; }
+.nav__sections {
+  display: flex; flex-direction: column; gap: 4px;
+  position: absolute; top: calc(100% + 8px); right: 28px; width: 230px;
+  padding: 10px; border: 1px solid var(--line-2); border-radius: 16px;
+  background: rgba(14,14,20,.98); box-shadow: 0 20px 45px rgba(0,0,0,.38);
+  opacity: 0; transform: translateY(-8px); pointer-events: none;
+  transition: opacity .2s ease, transform .2s ease;
+}
+.nav__sections.is-open { opacity: 1; transform: none; pointer-events: auto; }
+.nav__sections a { padding: 13px 15px; border-radius: 10px; color: var(--text); font-weight: 700; }
+.nav__sections a:hover, .nav__sections a[aria-current="page"] { background: rgba(255,255,255,.08); }
+@media (max-width: 650px) { .nav__sections { right: 12px; } }
 
 /* ========== HERO ========== */
 .hero {
