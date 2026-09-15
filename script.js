@@ -139,7 +139,8 @@
       status.classList.remove('is-error');
       status.textContent = 'Отправляем заявку…';
       try {
-        const response = await fetch('/api/booking', {
+        const leadApi = window.FORCE_LEADS_API_URL;
+        const response = await fetch(leadApi ? `${leadApi}?kind=booking` : '/api/booking', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ name, phone: phoneValue }),

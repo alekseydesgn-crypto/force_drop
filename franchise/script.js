@@ -71,7 +71,8 @@
     let utm = {};
     try { utm = JSON.parse(sessionStorage.getItem('force_franchise_utm') || '{}'); } catch {}
     try {
-      const response = await fetch('/api/franchise', {
+      const leadApi = window.FORCE_LEADS_API_URL;
+      const response = await fetch(leadApi ? `${leadApi}?kind=franchise` : '/api/franchise', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ ...payload, ...utm, source: sourceInput.value, page_url: location.href, referrer: document.referrer }),
