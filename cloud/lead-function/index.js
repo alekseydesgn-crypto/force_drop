@@ -82,14 +82,35 @@ async function googleRelay(kind, id, text) {
   const url = process.env.GOOGLE_RELAY_URL;
   const secret = process.env.GOOGLE_RELAY_SECRET;
   if (!url || !secret) return false;
-  const response = await fetch(url, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ secret, kind, id, text }),
-    signal: AbortSignal.timeout(15000),
-  });
-  const result = await response.json();
-  return response.ok && result.ok === true;
+  for (let attempt = 0; attempt < 2; attempt++) {
+    try {
+      const signal = AbortSignal.timeout(12000);
+      let response = await fetch(url, {
+        method: 'POST', redirect: 'manual',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ secret, kind, id, text }), signal,
+      });
+      if ([301, 302, 303].includes(response.status)) {
+        const target = new URL(response.headers.get('location'), url);
+        if (target.protocol !== 'https:' || target.hostname !== 'script.googleusercontent.com') throw new Error('UnexpectedRelayRedirect');
+        // Google ContentService uses a one-time GET URL. Never forward credentials.
+        response = await fetch(target, { redirect: 'error', signal });
+      }
+      const raw = await response.text();
+      let result;
+      try { result = JSON.parse(raw); }
+      catch {
+        console.warn(`Relay non-JSON response: status=${response.status} type=${response.headers.get('content-type') || 'none'} bytes=${Buffer.byteLength(raw)}`);
+        throw new Error('InvalidRelayResponse');
+      }
+      if (response.ok && result.ok === true) return true;
+      console.warn(`Relay rejected ${kind} ${id}: ${['not_configured', 'busy', 'telegram_failed', 'send_failed'].includes(result.error) ? result.error : 'rejected'}`);
+      return false;
+    } catch (error) {
+      console.warn(`Relay attempt ${attempt + 1} failed for ${kind} ${id}: ${error.name}`);
+    }
+  }
+  return false;
 }
 
 module.exports.handler = async event => {
@@ -127,7 +148,7 @@ async function deliver(kind, id, text, origin) {
   const token = process.env[kind === 'booking' ? 'BOOKING_TELEGRAM_BOT_TOKEN' : 'FRANCHISE_TELEGRAM_BOT_TOKEN'];
   const chat = process.env[kind === 'booking' ? 'BOOKING_TELEGRAM_CHAT_ID' : 'FRANCHISE_TELEGRAM_CHAT_ID'];
   if (!token && !process.env.GOOGLE_RELAY_URL) return reply(503, { ok: false, error: 'Приём заявок временно недоступен.' }, origin);
-  if (token && chat) {
+  if (!process.env.GOOGLE_RELAY_URL && token && chat) {
     try { if (await telegram(token, chat, text)) return reply(200, { ok: true, id, route: 'direct' }, origin); }
     catch (error) { console.warn(`Direct Telegram delivery failed for ${kind} ${id}: ${error.name}`); }
   }
