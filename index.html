@@ -728,6 +728,7 @@ _tmr.push({id: "3784195", type: "pageView", start: (new Date()).getTime(), pid: 
 
     <div class="contact">
       <form class="form" id="bookingForm" novalidate>
+        <div aria-hidden="true" style="position:absolute;left:-10000px;width:1px;height:1px;overflow:hidden"><label>Website<input name="website" tabindex="-1" autocomplete="off"/></label></div>
         <div class="field">
           <label for="f-name">Имя</label>
           <input id="f-name" name="name" type="text" required placeholder="ФИО" autocomplete="name"/>
@@ -831,6 +832,7 @@ _tmr.push({id: "3784195", type: "pageView", start: (new Date()).getTime(), pid: 
   <div class="lightbox__thumbs" id="lb-thumbs"></div>
 </div>
 
+<script src="/lead-config.js"></script>
 <script src="script.js"></script>
 </body>
 </html>
