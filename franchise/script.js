@@ -62,19 +62,31 @@
     if (!formStarted) { formStarted = true; track('form_start', { source: sourceInput.value }); }
   });
 
+  let pending = false;
+  let previousPayload;
+  let requestId;
+  const trap = document.createElement('div');
+  trap.setAttribute('aria-hidden', 'true');
+  trap.style.cssText = 'position:absolute;left:-10000px;width:1px;height:1px;overflow:hidden';
+  trap.innerHTML = '<label>Website<input name="website" tabindex="-1" autocomplete="off"></label>';
+  form.appendChild(trap);
   form.addEventListener('submit', async event => {
     event.preventDefault();
+    if (pending) return;
+    pending = true;
     form.querySelector('.form-error')?.remove();
     submit.disabled = true;
     submit.textContent = 'Отправляем…';
     const payload = Object.fromEntries(new FormData(form).entries());
+    const serialized = JSON.stringify(payload);
+    if (previousPayload !== serialized) { requestId = crypto.randomUUID(); previousPayload = serialized; }
     let utm = {};
     try { utm = JSON.parse(sessionStorage.getItem('force_franchise_utm') || '{}'); } catch {}
     try {
-      const response = await fetch('https://alexeydesign.ru/api/franchise', {
+      const response = await fetch(`${window.FORCE_FRANCHISE_API_URL}?kind=franchise`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...payload, ...utm, source: sourceInput.value, page_url: location.href, referrer: document.referrer }),
+        body: JSON.stringify({ ...payload, requestId }),
       });
       const result = await response.json();
       if (!response.ok || result.ok !== true) throw new Error(result.error || 'Не удалось отправить заявку. Попробуйте ещё раз.');
@@ -90,6 +102,8 @@
       submit.before(message);
       submit.disabled = false;
       submit.innerHTML = initialButton;
+    } finally {
+      pending = false;
     }
   });
 })();
