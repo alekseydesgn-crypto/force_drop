@@ -120,8 +120,12 @@
   const form = $('#bookingForm');
   const status = $('#formStatus');
   if (form) {
+    let pending = false;
+    let requestId;
+    let previousPayload;
     form.addEventListener('submit', async (event) => {
       event.preventDefault();
+      if (pending) return;
       const name = ($('#f-name')?.value || '').trim();
       const phoneValue = (phone?.value || '').trim();
       const digits = phoneValue.replace(/\D/g, '');
@@ -133,26 +137,31 @@
         return;
       }
       const button = form.querySelector('.form__submit');
+      pending = true;
+      const payload = JSON.stringify({ name, phone: phoneValue });
+      if (payload !== previousPayload) { requestId = crypto.randomUUID(); previousPayload = payload; }
       const originalLabel = button?.textContent || 'Отправить заявку';
       if (button) { button.disabled = true; button.textContent = 'Отправляем…'; }
       status.hidden = false;
       status.classList.remove('is-error');
       status.textContent = 'Отправляем заявку…';
       try {
-        const leadApi = window.FORCE_LEADS_API_URL;
+        const leadApi = window.FORCE_BOOKING_API_URL || window.FORCE_LEADS_API_URL;
         const response = await fetch(leadApi ? `${leadApi}?kind=booking` : '/api/booking', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ name, phone: phoneValue }),
+          body: JSON.stringify({ name, phone: phoneValue, requestId, website: form.elements.website?.value || '' }),
         });
         const result = await response.json();
         if (!response.ok || result.ok !== true) throw new Error(result.error || 'Не удалось отправить заявку. Попробуй ещё раз.');
         status.textContent = '✅ Заявка отправлена! Администратор скоро перезвонит';
         form.reset();
+        previousPayload = undefined;
       } catch (error) {
         status.classList.add('is-error');
         status.textContent = error instanceof Error ? error.message : 'Не удалось отправить заявку. Попробуй ещё раз.';
       } finally {
+        pending = false;
         if (button) { button.disabled = false; button.textContent = originalLabel; }
       }
     });

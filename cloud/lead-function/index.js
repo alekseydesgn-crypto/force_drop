@@ -1,6 +1,17 @@
 const { randomUUID } = require('node:crypto');
 
 const SITE_ORIGIN = process.env.SITE_ORIGIN || 'https://club.forcezon.ru';
+// Best-effort per-instance limits; a shared gateway limit is needed at scale.
+const attempts = new Map();
+const deliveries = new Map();
+function allow(ip) {
+  const now = Date.now();
+  for (const [key, entry] of attempts) if (now - entry.start > 60000) attempts.delete(key);
+  if (attempts.size >= 2000 && !attempts.has(ip)) return false;
+  const entry = attempts.get(ip) || { start: now, count: 0 };
+  attempts.set(ip, entry);
+  return ++entry.count <= 5;
+}
 
 function reply(statusCode, payload, origin) {
   return {
@@ -93,12 +104,26 @@ module.exports.handler = async event => {
   try { data = JSON.parse(event.isBase64Encoded ? Buffer.from(event.body, 'base64').toString('utf8') : event.body); }
   catch { return reply(400, { ok: false, error: 'Проверьте поля заявки.' }, origin); }
   if (!data || typeof data !== 'object' || Array.isArray(data)) return reply(400, { ok: false, error: 'Проверьте поля заявки.' }, origin);
+  const ip = event.requestContext?.identity?.sourceIp || 'unknown';
+  if (!allow(ip)) return reply(429, { ok: false, error: 'Слишком много попыток. Подождите минуту.' }, origin);
   const kind = event.path === '/booking' || event.queryStringParameters?.kind === 'booking' ? 'booking' : 'franchise';
   let text;
   try { text = message(kind, data); }
   catch (error) { return reply(400, { ok: false, error: error.message }, origin); }
 
-  const id = randomUUID();
+  const id = /^[a-f0-9-]{36}$/.test(data.requestId || '') ? data.requestId : randomUUID();
+  for (const [key, entry] of deliveries) if (Date.now() - entry.created > 600000) deliveries.delete(key);
+  const previous = deliveries.get(id);
+  if (previous) return previous.text === text && previous.kind === kind ? previous.promise : reply(409, { ok: false, error: 'Повторите отправку.' }, origin);
+  if (deliveries.size >= 2000) return reply(429, { ok: false, error: 'Повторите позже.' }, origin);
+  const promise = deliver(kind, id, text, origin);
+  deliveries.set(id, { created: Date.now(), text, kind, promise });
+  const result = await promise;
+  if (result.statusCode !== 200) deliveries.delete(id);
+  return result;
+};
+
+async function deliver(kind, id, text, origin) {
   const token = process.env[kind === 'booking' ? 'BOOKING_TELEGRAM_BOT_TOKEN' : 'FRANCHISE_TELEGRAM_BOT_TOKEN'];
   const chat = process.env[kind === 'booking' ? 'BOOKING_TELEGRAM_CHAT_ID' : 'FRANCHISE_TELEGRAM_CHAT_ID'];
   if (!token && !process.env.GOOGLE_RELAY_URL) return reply(503, { ok: false, error: 'Приём заявок временно недоступен.' }, origin);
@@ -110,4 +135,4 @@ module.exports.handler = async event => {
     if (await googleRelay(kind, id, text)) return reply(200, { ok: true, id, route: 'relay' }, origin);
   } catch (error) { console.warn(`Google relay failed for ${kind} ${id}: ${error.name}`); }
   return reply(502, { ok: false, id, error: 'Не удалось подтвердить доставку заявки. Повторите позже.' }, origin);
-};
+}
