@@ -1910,3 +1910,9 @@ body.lb-open { overflow: hidden; }
   margin-top: 30px;
   margin-bottom: 40px;
 }
+
+/* The section menu is the only header navigation on the main page. */
+.nav__cta { margin-left: auto; }
+.nav__sections[hidden], .nav__links[hidden] { display: none; }
+.form__note a { text-decoration: underline; text-underline-offset: 3px; }
+@media (max-width: 650px) { .nav__burger { margin-left: auto; } }

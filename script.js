@@ -17,14 +17,22 @@
   const burger = $('#navBurger');
   const links = $('#navSections');
   if (burger && links) {
-    const close = () => { burger.setAttribute('aria-expanded', 'false'); links.classList.remove('is-open'); };
+    const close = () => {
+      burger.setAttribute('aria-expanded', 'false');
+      burger.setAttribute('aria-label', 'Открыть меню разделов');
+      links.classList.remove('is-open');
+      links.hidden = true;
+    };
     burger.addEventListener('click', () => {
       const open = burger.getAttribute('aria-expanded') === 'true';
       burger.setAttribute('aria-expanded', String(!open));
+      burger.setAttribute('aria-label', open ? 'Открыть меню разделов' : 'Закрыть меню разделов');
+      links.hidden = open;
       links.classList.toggle('is-open', !open);
     });
     links.addEventListener('click', (e) => { if (e.target.closest('a')) close(); });
     document.addEventListener('keydown', (e) => { if (e.key === 'Escape') close(); });
+    document.addEventListener('click', (e) => { if (!burger.contains(e.target) && !links.contains(e.target)) close(); });
   }
 
   // reveal on scroll

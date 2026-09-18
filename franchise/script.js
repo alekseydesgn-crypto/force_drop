@@ -6,11 +6,13 @@
       menu.setAttribute('aria-expanded', 'false');
       menu.setAttribute('aria-label', 'Открыть меню');
       links.classList.remove('open');
+      links.hidden = true;
     };
     menu.addEventListener('click', () => {
       const open = menu.getAttribute('aria-expanded') !== 'true';
       menu.setAttribute('aria-expanded', String(open));
       menu.setAttribute('aria-label', open ? 'Закрыть меню' : 'Открыть меню');
+      links.hidden = !open;
       links.classList.toggle('open', open);
     });
     links.addEventListener('click', event => { if (event.target.closest('a')) close(); });

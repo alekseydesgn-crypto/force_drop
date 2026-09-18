@@ -45,6 +45,7 @@ _tmr.push({id: "3784195", type: "pageView", start: (new Date()).getTime(), pid: 
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Unbounded:wght@600;700;800;900&display=swap" rel="stylesheet"/>
 
   <link rel="stylesheet" href="styles.css"/>
+  <link rel="stylesheet" href="site-footer.css"/>
 </head>
 <body>
 
@@ -54,20 +55,9 @@ _tmr.push({id: "3784195", type: "pageView", start: (new Date()).getTime(), pid: 
     <img src="assets/logo-nav.png" alt="ФОРС Дроп Зона"/>
   </a>
 
-  <nav class="nav__links" id="navLinks">
-    <a href="#concept">Концепция</a>
-    <a href="#zones">Зоны</a>
-    <a href="#drops">Дропы</a>
-    <a href="#prices">Прайс</a>
-    <a href="#promos">Скидки</a>
-    <a href="#bar">Бар и кальян</a>
-    <a href="#gallery">Интерьер</a>
-    <a href="#contact">Контакты</a>
-  </nav>
-
   <a href="#contact" class="btn btn--primary btn--clean nav__cta">Забронировать</a>
 
-  <nav class="nav__sections" id="navSections" aria-label="Разделы сайта">
+  <nav class="nav__sections" id="navSections" aria-label="Разделы сайта" hidden>
     <a href="/" aria-current="page">Главная</a>
     <a href="/franchise/">Франшиза</a>
   </nav>
@@ -740,7 +730,7 @@ _tmr.push({id: "3784195", type: "pageView", start: (new Date()).getTime(), pid: 
         </div>
 
         <button type="submit" class="btn btn--primary btn--lg btn--clean form__submit">Отправить заявку</button>
-        <p class="form__note">Нажимая кнопку, ты соглашаешься на обработку персональных данных.</p>
+        <p class="form__note">Отправляя заявку, ты принимаешь <a href="/consent/">согласие на обработку персональных данных</a> и подтверждаешь, что ознакомился с <a href="/privacy/">политикой обработки данных</a>.</p>
         <p class="form__status" id="formStatus" hidden></p>
       </form>
 
@@ -796,22 +786,17 @@ _tmr.push({id: "3784195", type: "pageView", start: (new Date()).getTime(), pid: 
 </section>
 
 <!-- ============== FOOTER ============== -->
-<footer class="footer">
-  <div class="container footer__inner">
-    <a href="#top" class="footer__brand">
-      <img src="assets/logo-nav.png" alt="ФОРС Дроп Зона"/>
-    </a>
-    <div class="footer__address">
-      <span class="footer__city">Москва</span>
-      <a href="https://yandex.com/maps/-/CPcVZD8F" target="_blank" rel="noopener">ул. Часовая, 16с1</a>
-    </div>
-    <p class="footer__copy">© <span id="year"></span> ФОРС Дроп Зона · Играй · Побеждай · Лутай</p>
-    <div class="footer__links">
-      <a href="#concept">Концепция</a>
-      <a href="#prices">Тарифы</a>
-      <a href="#contact">Контакты</a>
-    </div>
+<footer class="site-footer">
+  <a href="#top" class="site-footer__logo"><img src="assets/logo-nav.png" alt="ФОРС Дроп Зона"/></a>
+  <div class="site-footer__location"><small>МОСКВА</small><span>ул. Часовая, 16с1</span></div>
+  <div class="site-footer__center">
+    <a href="https://t.me/forcedropzone" target="_blank" rel="noreferrer">Написать в Telegram</a>
+    <a href="/privacy/">Политика обработки данных</a>
+    <a href="/consent/">Согласие на обработку данных</a>
+    <p>© <span id="year"></span> ФОРС Дроп Зона · Играй · Побеждай · Лутай</p>
   </div>
+  <nav class="site-footer__nav"><a href="/">Главная</a><a href="/franchise/">Франшиза</a><a href="#contact">Контакты</a></nav>
+  <nav class="site-footer__nav"><a href="#concept">Концепция</a><a href="#prices">Тарифы</a><a href="#gallery">Интерьер</a><a href="#contact">Бронь</a></nav>
 </footer>
 
 <!-- ============== LIGHTBOX ============== -->
