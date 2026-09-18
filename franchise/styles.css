@@ -473,6 +473,7 @@ h1 em {
 }
 .economy-cell {
   position: relative;
+  container-type: inline-size;
 }
 .economy-cell svg {
   position: absolute;
@@ -1095,7 +1096,7 @@ html {
 .plan-grid strong {
   font-family: Benzin;
   display: block;
-  font-size: clamp(28px, 3.2vw, 52px);
+  font-size: clamp(24px, 2.7vw, 40px);
   line-height: 1.02;
   letter-spacing: -0.035em;
 }
@@ -1363,6 +1364,7 @@ summary:focus-visible {
 /* Keep all four headline figures on the same starting line. */
 .plan-grid article {
   display: grid;
+  container-type: inline-size;
   grid-template-rows: 42px auto 1fr;
   align-content: stretch;
   justify-content: initial;
@@ -1371,10 +1373,16 @@ summary:focus-visible {
 .plan-grid strong {
   align-self: start;
   min-width: 0;
+  font-size: clamp(16px, 10cqw, 40px);
   white-space: nowrap;
 }
 .plan-grid span {
   align-self: end;
+}
+.economy-cell strong,
+.economy-cell.wide strong {
+  font-size: clamp(18px, 10cqw, 42px);
+  white-space: nowrap;
 }
 @media (max-width: 650px) {
   .plan-grid article {
@@ -1382,12 +1390,12 @@ summary:focus-visible {
     row-gap: 8px;
   }
   .plan-grid strong {
-    font-size: 22px;
+    font-size: clamp(16px, 10cqw, 34px);
     letter-spacing: -0.06em;
   }
   .economy-cell strong,
   .economy-cell.wide strong {
-    font-size: 21px;
+    font-size: clamp(16px, 10cqw, 28px);
     letter-spacing: -0.06em;
     white-space: nowrap;
   }
